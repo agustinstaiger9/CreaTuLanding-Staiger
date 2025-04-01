@@ -1,20 +1,22 @@
-// src/components/Navbar.jsx
-import CartWidget from './CartWidget';
+import { Link } from "react-router-dom";
+import "../app.css";
 
 function Navbar() {
-  return (
-    <nav className="navbar">
-      <div className="brandname">eCommerce Staiger</div>
-      
-      <ul className="categories">
-        <li>Celulares</li>
-        <li>Tecnología</li>
-        <li>PC</li>
-      </ul>
-      
-      <CartWidget />
-    </nav>
-  );
+    return (
+        <nav>
+            <ul>
+                <li>
+                    <Link to="/">Inicio</Link>
+                </li>
+                <li>
+                    <Link to="/category/smartphones">Smartphones</Link> {}
+                </li>
+                <li>
+                    <Link to="/category/laptops">Laptops</Link> {}
+                </li>
+            </ul>
+        </nav>
+    );
 }
 
 export default Navbar;
