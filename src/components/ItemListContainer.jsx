@@ -7,6 +7,7 @@ import { db } from "../firebase"; // Asegurate que el archivo se llame así o aj
 const ItemListContainer = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState({});
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -19,6 +20,13 @@ const ItemListContainer = () => {
           ...doc.data(),
         }));
         setProducts(items);
+
+        // Inicializamos cantidades en 1
+        const initialQuantities = {};
+        items.forEach((item) => {
+          initialQuantities[item.id] = 1;
+        });
+        setQuantities(initialQuantities);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
       } finally {
@@ -28,6 +36,20 @@ const ItemListContainer = () => {
 
     fetchProducts();
   }, []);
+
+  const increment = (id) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: prev[id] + 1,
+    }));
+  };
+
+  const decrement = (id) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: Math.max(1, prev[id] - 1),
+    }));
+  };
 
   if (loading) {
     return <p style={{ textAlign: "center" }}>Cargando productos...</p>;
@@ -58,9 +80,8 @@ const ItemListContainer = () => {
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             }}
           >
-            {/* Podés poner una imagen por defecto si aún no cargaste imagenes en Firestore */}
             <img
-              src={product.image || "https://via.placeholder.com/200x200?text=Imagen"} 
+              src={product.image || "https://via.placeholder.com/200x200?text=Imagen"}
               alt={product.title}
               style={{
                 width: "100%",
@@ -71,10 +92,18 @@ const ItemListContainer = () => {
             />
             <h3>{product.title}</h3>
             <p><strong>Precio:</strong> ${product.price}</p>
+
+            {/* Controles de cantidad */}
+            <div style={{ margin: "10px 0" }}>
+              <button onClick={() => decrement(product.id)}>-</button>
+              <span style={{ margin: "0 10px" }}>{quantities[product.id]}</span>
+              <button onClick={() => increment(product.id)}>+</button>
+            </div>
+
             <Link to={`/item/${product.id}`}>Ver detalles</Link>
             <br />
             <button
-              onClick={() => addToCart(product, 1)}
+              onClick={() => addToCart(product, quantities[product.id])}
               style={{
                 marginTop: "10px",
                 padding: "8px 16px",
