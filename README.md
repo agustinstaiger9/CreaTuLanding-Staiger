@@ -1,8 +1,16 @@
-# React + Vite
+# Proyecto Final para Carrera Desarrollador FrontEnd React - Ecommerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es un proyecto de ecommerce realizado con **React**. El proyecto fue desarrollado como parte de un proyecto final, y utiliza **Firebase** para la autenticación y almacenamiento de datos.
 
-Currently, two official plugins are available:
+## Descripción
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este proyecto es una tienda en línea donde los usuarios pueden explorar productos, agregar al carrito y realizar compras. Los datos de productos y el historial de compras están gestionados por Firebase Firestore. 
+
+
+## Tecnologías usadas
+
+- **React**: Framework principal para la construcción de la interfaz de usuario.
+- **Vite**: Herramienta para la construcción del proyecto.
+- **Firebase**: Utilizado para la autenticación de usuarios y almacenamiento en Firestore.
+- **CSS/SCSS**: Estilos para el diseño y layout de la aplicación.
+- **React Router**: Para gestionar la navegación dentro de la aplicación.
