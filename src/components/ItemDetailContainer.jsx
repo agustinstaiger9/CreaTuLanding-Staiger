@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // Hook para manejar el carrito
-import ItemCount from "./ItemCount"; // Importamos el componente ItemCount
+import { useCart } from "../context/CartContext";
+import ItemCount from "./ItemCount";
 
 const ItemDetailContainer = () => {
-  const [product, setProduct] = useState(null); // Estado para almacenar el producto
-  const { id } = useParams(); // Obtiene el id del producto de la URL
-  const { addToCart } = useCart(); // Hook para agregar al carrito
+  const [product, setProduct] = useState(null);
+  const { id } = useParams();
+  const { addToCart } = useCart();
 
-  const [quantity, setQuantity] = useState(1); // Estado para manejar la cantidad seleccionada
+  const [quantity, setQuantity] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false); // <- Nuevo estado
 
   useEffect(() => {
     fetch(`https://dummyjson.com/products/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((error) => console.error("Error al cargar el producto:", error));
-  }, [id]); // Ejecuta nuevamente cuando cambia el id
+  }, [id]);
+
+  const handleAddToCart = (quantity) => {
+    addToCart(product, quantity);
+    setAddedToCart(true); // Oculta el contador después de agregar
+  };
 
   if (!product) {
     return <p>Cargando detalles del producto...</p>;
@@ -37,12 +43,17 @@ const ItemDetailContainer = () => {
       <p><strong>Precio:</strong> ${product.price}</p>
       <p>{product.description}</p>
 
-      {/* Componente ItemCount */}
-      <ItemCount
-        stock={product.stock} // Pasamos el stock disponible
-        initial={1} // Cantidad inicial
-        onAdd={(quantity) => addToCart(product, quantity)} // Pasa la cantidad seleccionada al carrito
-      />
+      {!addedToCart ? (
+        <ItemCount
+          stock={product.stock}
+          initial={1}
+          onAdd={handleAddToCart}
+        />
+      ) : (
+        <p style={{ marginTop: "1rem", color: "green" }}>
+          Producto agregado al carrito ✔️
+        </p>
+      )}
     </div>
   );
 };
