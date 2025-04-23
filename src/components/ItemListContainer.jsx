@@ -1,32 +1,41 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom"; // Usamos useParams para obtener la categoría
 import { useCart } from "../context/CartContext";
 
 const ItemListContainer = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
+  const { categoryId } = useParams(); // Obtenemos el parámetro categoryId de la URL
 
   useEffect(() => {
-    fetch("https://dummyjson.com/products")
+    setLoading(true); // Reestablecemos el estado de carga
+    let url = "https://dummyjson.com/products"; // URL base de productos
+
+    // Si hay un categoryId en la URL, filtramos los productos por esa categoría
+    if (categoryId) {
+      url = `https://dummyjson.com/products/category/${categoryId}`;
+    }
+
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data.products);
-        setLoading(false);
+        setProducts(data.products); // Asignamos los productos a la variable de estado
+        setLoading(false); // Terminamos de cargar
       })
       .catch((error) => {
         console.error("Error al cargar los productos:", error);
-        setLoading(false);
+        setLoading(false); // En caso de error, también terminamos de cargar
       });
-  }, []);
+  }, [categoryId]); // Este useEffect se ejecuta cuando cambia el categoryId
 
   if (loading) {
-    return <p style={{ textAlign: "center" }}>Cargando productos...</p>;
+    return <p style={{ textAlign: "center" }}>Cargando productos...</p>; // Mensaje mientras carga
   }
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h2>Productos disponibles</h2>
+      <h2>{categoryId ? categoryId.charAt(0).toUpperCase() + categoryId.slice(1) : "Productos disponibles"}</h2>
       <div
         className="product-list"
         style={{
@@ -50,7 +59,7 @@ const ItemListContainer = () => {
             }}
           >
             <img
-              src={product.images[0]} // <-- Usamos la primera imagen del array
+              src={product.images[0]} // Usamos la primera imagen del array de imágenes
               alt={product.title}
               style={{
                 width: "100%",
