@@ -14,6 +14,9 @@ function Navbar() {
         <li>
           <Link to="/category/laptops">Laptops</Link>
         </li>
+        <li>
+          <Link to="/cart">Carrito</Link> {/* Enlace al carrito */}
+        </li>
       </ul>
     </nav>
   );
