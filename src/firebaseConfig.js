@@ -1,7 +1,7 @@
 // Importa la función para inicializar Firebase
 import { initializeApp } from "firebase/app";
 
-// Configuración de Firebase (la que copiaste)
+// Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCGmFpa6_08fosZsuvFk-Hz6ETjxkkaPEo",
   authDomain: "agustinstaiger-react.firebaseapp.com",
