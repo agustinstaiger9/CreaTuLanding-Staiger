@@ -1,51 +1,53 @@
-import { useEffect, useState, useContext } from "react";
+// src/components/ItemDetailContainer.jsx
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { CartContext } from "../context/CartContext"; // Importamos el contexto
+import { useCart } from "../context/CartContext"; // Hook para manejar el carrito
 
 const ItemDetailContainer = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const { addToCart } = useContext(CartContext); // Usamos el contexto para acceder a la función addToCart
+  const [product, setProduct] = useState(null); // Estado para almacenar el producto
+  const { id } = useParams(); // Obtiene el id del producto de la URL
+  const { addToCart } = useCart(); // Hook para agregar al carrito
 
   useEffect(() => {
-    setLoading(true);
-    // Corregimos la interpolación de la URL
     fetch(`https://dummyjson.com/products/${id}`)
       .then((res) => res.json())
-      .then((data) => {
-        setProduct(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error al cargar el producto:", error);
-        setLoading(false);
-      });
-  }, [id]);
-
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
+      .then((data) => setProduct(data))
+      .catch((error) => console.error("Error al cargar el producto:", error));
+  }, [id]); // Ejecuta nuevamente cuando cambia el id
 
   if (!product) {
-    return <p>Producto no encontrado</p>;
+    return <p>Cargando detalles del producto...</p>;
   }
 
-  const handleAddToCart = () => {
-    addToCart(product); // Llamamos a la función addToCart del contexto para agregar el producto
-  };
-
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
+    <div style={{ textAlign: "center" }}>
       <h2>{product.title}</h2>
       <img
-        src={product.thumbnail}
+        src={product.image}
         alt={product.title}
-        style={{ width: "300px", height: "auto", borderRadius: "10px" }}
+        style={{
+          width: "100%",
+          maxWidth: "400px",
+          objectFit: "cover",
+          borderRadius: "8px",
+        }}
       />
-      <p>{product.description}</p>
       <p><strong>Precio:</strong> ${product.price}</p>
-      <button onClick={handleAddToCart}>Agregar al carrito</button> {/* Botón para agregar al carrito */}
+      <p>{product.description}</p>
+      <button
+        onClick={() => addToCart(product)} // Al hacer clic, agrega el producto al carrito
+        style={{
+          marginTop: "10px",
+          padding: "8px 16px",
+          backgroundColor: "#28a745",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+      >
+        Agregar al carrito
+      </button>
     </div>
   );
 };

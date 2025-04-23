@@ -1,50 +1,24 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useState, useContext } from "react";
 
-// Crear y exportar el contexto
-export const CartContext = createContext();
+// Crear el contexto del carrito
+const CartContext = createContext();
 
-export const useCart = () => useContext(CartContext);
-
+// Proveedor del contexto
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState([]); // Estado para almacenar los productos en el carrito
 
-  // Función para agregar un ítem al carrito
-  const addItem = (item, quantity) => {
-    const existingItem = cartItems.find((prod) => prod.id === item.id);
-
-    if (existingItem) {
-      setCartItems(
-        cartItems.map((prod) =>
-          prod.id === item.id
-            ? { ...prod, quantity: prod.quantity + quantity }
-            : prod
-        )
-      );
-    } else {
-      setCartItems([...cartItems, { ...item, quantity }]);
-    }
-  };
-
-  // Función para eliminar un ítem del carrito
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
-
-  // Función para vaciar el carrito
-  const clearCart = () => {
-    setCartItems([]);
-  };
-
-  // Función para obtener el total de productos en el carrito
-  const getTotalItems = () => {
-    return cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const addToCart = (product) => {
+    setCart((prevCart) => [...prevCart, product]); // Añade el producto al carrito
   };
 
   return (
-    <CartContext.Provider
-      value={{ cartItems, addItem, removeItem, clearCart, getTotalItems }}
-    >
+    <CartContext.Provider value={{ cart, addToCart }}>
       {children}
     </CartContext.Provider>
   );
+};
+
+// Hook personalizado para usar el carrito
+export const useCart = () => {
+  return useContext(CartContext);
 };

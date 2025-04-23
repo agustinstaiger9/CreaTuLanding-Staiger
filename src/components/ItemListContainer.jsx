@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Usamos Link para redirigir a la página de detalle
+import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 const ItemListContainer = () => {
-  const [products, setProducts] = useState([]); // Estado para almacenar los productos
-  const [loading, setLoading] = useState(true); // Estado para gestionar la carga
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
 
   useEffect(() => {
-    setLoading(true);
-    // Realiza la solicitud a la API para obtener todos los productos
     fetch("https://dummyjson.com/products")
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data.products); // Almacena los productos en el estado
-        setLoading(false); // Cambia el estado de carga a falso
+        setProducts(data.products);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error al cargar los productos:", error);
         setLoading(false);
       });
-  }, []); // Solo se ejecuta una vez cuando se carga el componente
+  }, []);
 
   if (loading) {
-    return <p>Cargando productos...</p>; // Muestra mensaje mientras carga
+    return <p style={{ textAlign: "center" }}>Cargando productos...</p>;
   }
 
   return (
@@ -33,7 +33,7 @@ const ItemListContainer = () => {
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "center",
-          gap: "20px", // Añadí un espacio entre los productos
+          gap: "20px",
         }}
       >
         {products.map((product) => (
@@ -50,7 +50,7 @@ const ItemListContainer = () => {
             }}
           >
             <img
-              src={product.thumbnail}
+              src={product.images[0]} // <-- Usamos la primera imagen del array
               alt={product.title}
               style={{
                 width: "100%",
@@ -64,6 +64,21 @@ const ItemListContainer = () => {
               <strong>Precio:</strong> ${product.price}
             </p>
             <Link to={`/item/${product.id}`}>Ver detalles</Link>
+            <br />
+            <button
+              onClick={() => addToCart(product)}
+              style={{
+                marginTop: "10px",
+                padding: "8px 16px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Agregar al carrito
+            </button>
           </div>
         ))}
       </div>
