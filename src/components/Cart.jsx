@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import { CartContext } from "../context/CartContext"; // Asegúrate de que la ruta esté correcta
+import { useCart } from "../context/CartContext"; // Importa el hook useCart
 
 const Cart = () => {
-  const { cartItems, removeItem, clearCart } = useContext(CartContext); // Usamos cartItems en lugar de cart
+  const { cart, removeItem, clearCart } = useCart(); // Accede a los elementos del carrito
 
-  if (cartItems.length === 0) {
+  if (cart.length === 0) {
     return <p>El carrito está vacío.</p>;
   }
 
@@ -12,7 +11,7 @@ const Cart = () => {
     <div>
       <h2>Tu carrito</h2>
       <ul>
-        {cartItems.map((product) => ( // Cambié cart por cartItems
+        {cart.map((product) => (
           <li key={product.id}>
             <img
               src={product.thumbnail}
@@ -21,7 +20,8 @@ const Cart = () => {
             />
             <p>{product.title}</p>
             <p>Precio: ${product.price}</p>
-            <button onClick={() => removeItem(product.id)}>Eliminar</button> {/* Cambié removeFromCart por removeItem */}
+            <p>Cantidad: {product.quantity}</p>
+            <button onClick={() => removeItem(product.id)}>Eliminar</button>
           </li>
         ))}
       </ul>

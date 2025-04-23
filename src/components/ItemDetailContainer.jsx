@@ -21,11 +21,6 @@ const ItemDetailContainer = () => {
     return <p>Cargando detalles del producto...</p>;
   }
 
-  const handleAddToCart = () => {
-    const productWithQuantity = { ...product, quantity }; // Agregar la cantidad seleccionada al producto
-    addToCart(productWithQuantity); // Agregar al carrito
-  };
-
   return (
     <div style={{ textAlign: "center" }}>
       <h2>{product.title}</h2>
@@ -48,8 +43,6 @@ const ItemDetailContainer = () => {
         initial={1} // Cantidad inicial
         onAdd={(quantity) => addToCart(product, quantity)} // Pasa la cantidad seleccionada al carrito
       />
-
-
     </div>
   );
 };

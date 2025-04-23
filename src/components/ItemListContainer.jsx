@@ -75,7 +75,7 @@ const ItemListContainer = () => {
             <Link to={`/item/${product.id}`}>Ver detalles</Link>
             <br />
             <button
-              onClick={() => addToCart(product)}
+              onClick={() => addToCart(product, 1)} // Aquí pasamos la cantidad de 1
               style={{
                 marginTop: "10px",
                 padding: "8px 16px",

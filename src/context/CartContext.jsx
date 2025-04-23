@@ -7,34 +7,53 @@ export const CartProvider = ({ children }) => {
 
   // Agregar o actualizar productos en el carrito
   const addToCart = (product, quantity) => {
-    // Asegurarse de que quantity sea un número válido y mayor que 0
     const validQuantity = parseInt(quantity, 10);
+
     if (isNaN(validQuantity) || validQuantity <= 0) {
       console.error("Cantidad inválida:", quantity);
-      return; // No agregamos el producto si la cantidad no es válida
+      return;
     }
 
     setCart((prevCart) => {
-      // Verificar si el producto ya está en el carrito
       const existingProductIndex = prevCart.findIndex((item) => item.id === product.id);
 
+      // Si el producto ya existe en el carrito, actualiza la cantidad
       if (existingProductIndex !== -1) {
-        // Si el producto ya está, actualizamos la cantidad
         const updatedCart = [...prevCart];
-        updatedCart[existingProductIndex].quantity += validQuantity; // sumamos la cantidad
+        // Si ya existe, solo actualizamos la cantidad correctamente
+        const existingQuantity = updatedCart[existingProductIndex].quantity || 0;
+        updatedCart[existingProductIndex] = {
+          ...updatedCart[existingProductIndex],
+          quantity: existingQuantity + validQuantity,
+        };
         return updatedCart;
       } else {
-        // Si el producto no está, lo agregamos con la cantidad seleccionada
+        // Si el producto no existe en el carrito, lo agrega con la cantidad
         return [...prevCart, { ...product, quantity: validQuantity }];
       }
     });
   };
 
+  // Eliminar un producto del carrito
+  const removeItem = (productId) => {
+    setCart((prevCart) => prevCart.filter(item => item.id !== productId));
+  };
+
+  // Vaciar el carrito
+  const clearCart = () => {
+    setCart([]);
+  };
+
   // Obtener el total de productos en el carrito
-  const getCartCount = () => cart.reduce((total, item) => total + item.quantity, 0); // Sumar todas las cantidades
+  const getCartCount = () => cart.reduce((total, item) => total + item.quantity, 0);
+
+  // Obtener el total de precio del carrito
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, getCartCount }}>
+    <CartContext.Provider value={{ cart, addToCart, removeItem, clearCart, getCartCount, getTotalPrice }}>
       {children}
     </CartContext.Provider>
   );

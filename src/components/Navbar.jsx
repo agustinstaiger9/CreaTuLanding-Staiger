@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // Importamos el hook useCart
-import "../app.css"; // Importa app.css para aplicar los estilos globales
+import { useCart } from "../context/CartContext";
 
 function Navbar() {
-  const { getCartCount } = useCart(); // Obtenemos el número de productos en el carrito
+  const { getCartCount } = useCart();
 
   return (
     <nav className="navbar">
@@ -19,8 +18,8 @@ function Navbar() {
         </li>
         <li className="navbar-item">
           <Link to="/cart" className="navbar-link cart-icon">
-            <i className="fas fa-shopping-cart"></i> {/* Ícono del carrito */}
-            <span className="cart-bubble">{getCartCount()}</span> {/* Número dinámico de productos en el carrito */}
+            <i className="fas fa-shopping-cart"></i>
+            <span className="cart-bubble">{getCartCount()}</span>
           </Link>
         </li>
       </ul>
