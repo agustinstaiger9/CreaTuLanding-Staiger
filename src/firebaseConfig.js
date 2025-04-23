@@ -1,16 +1,15 @@
 // Importa la función para inicializar Firebase
 import { initializeApp } from "firebase/app";
 
-// Configuración de Firebase
+// Configuración de Firebase usando las variables de entorno
 const firebaseConfig = {
-  apiKey: "AIzaSyCGmFpa6_08fosZsuvFk-Hz6ETjxkkaPEo",
-  authDomain: "agustinstaiger-react.firebaseapp.com",
-  projectId: "agustinstaiger-react",
-  storageBucket: "agustinstaiger-react.firebasestorage.app",
-  messagingSenderId: "593416952852",
-  appId: "1:593416952852:web:9b3efc61d22cbb2a1f5b01"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
-
 
 const app = initializeApp(firebaseConfig);
 
