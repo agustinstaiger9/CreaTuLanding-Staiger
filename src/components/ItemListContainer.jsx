@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase"; // Asegurate que el archivo se llame así o ajustá el path
+import { db } from "../firebase";
 
 const ItemListContainer = () => {
   const [products, setProducts] = useState([]);

@@ -1,8 +1,8 @@
 import React from "react";
-import { useCart } from "../context/CartContext"; // Importa el hook useCart
+import { useCart } from "../context/CartContext";
 
 const ProductCard = ({ product }) => {
-  const { addToCart } = useCart(); // Accede a la función addToCart desde el CartContext
+  const { addToCart } = useCart();
 
   // Esta función se llama cuando el usuario hace clic en "Agregar al carrito"
   const handleAddToCart = () => {
