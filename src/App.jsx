@@ -7,7 +7,7 @@ import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import Confirmation from "./components/Confirmation";
 import Navbar from "./components/Navbar";
-import './app.css';
+import './App.css';
 
 function App() {
   return (
