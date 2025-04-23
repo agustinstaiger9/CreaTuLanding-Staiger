@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { CartContext } from "../context/cartcontext"; // Importamos el contexto
+import { CartContext } from "../context/CartContext"; // Importamos el contexto
 
 const ItemDetailContainer = () => {
   const { id } = useParams();
@@ -10,6 +10,7 @@ const ItemDetailContainer = () => {
 
   useEffect(() => {
     setLoading(true);
+    // Corregimos la interpolación de la URL
     fetch(`https://dummyjson.com/products/${id}`)
       .then((res) => res.json())
       .then((data) => {

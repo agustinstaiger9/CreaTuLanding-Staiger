@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import { CartContext } from "../context/cartcontext"; // Importamos el contexto
+import { CartContext } from "../context/CartContext"; // Asegúrate de que la ruta esté correcta
 
 const Cart = () => {
-  const { cart, removeFromCart, clearCart } = useContext(CartContext); // Usamos el contexto para acceder al carrito
+  const { cartItems, removeItem, clearCart } = useContext(CartContext); // Usamos cartItems en lugar de cart
 
-  if (cart.length === 0) {
+  if (cartItems.length === 0) {
     return <p>El carrito está vacío.</p>;
   }
 
@@ -12,12 +12,16 @@ const Cart = () => {
     <div>
       <h2>Tu carrito</h2>
       <ul>
-        {cart.map((product) => (
+        {cartItems.map((product) => ( // Cambié cart por cartItems
           <li key={product.id}>
-            <img src={product.thumbnail} alt={product.title} style={{ width: "50px", height: "50px", objectFit: "cover" }} />
+            <img
+              src={product.thumbnail}
+              alt={product.title}
+              style={{ width: "50px", height: "50px", objectFit: "cover" }}
+            />
             <p>{product.title}</p>
             <p>Precio: ${product.price}</p>
-            <button onClick={() => removeFromCart(product.id)}>Eliminar</button>
+            <button onClick={() => removeItem(product.id)}>Eliminar</button> {/* Cambié removeFromCart por removeItem */}
           </li>
         ))}
       </ul>
