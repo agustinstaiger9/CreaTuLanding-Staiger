@@ -1,12 +1,14 @@
-// src/components/ItemDetailContainer.jsx
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext"; // Hook para manejar el carrito
+import ItemCount from "./ItemCount"; // Importamos el componente ItemCount
 
 const ItemDetailContainer = () => {
   const [product, setProduct] = useState(null); // Estado para almacenar el producto
   const { id } = useParams(); // Obtiene el id del producto de la URL
   const { addToCart } = useCart(); // Hook para agregar al carrito
+
+  const [quantity, setQuantity] = useState(1); // Estado para manejar la cantidad seleccionada
 
   useEffect(() => {
     fetch(`https://dummyjson.com/products/${id}`)
@@ -18,6 +20,11 @@ const ItemDetailContainer = () => {
   if (!product) {
     return <p>Cargando detalles del producto...</p>;
   }
+
+  const handleAddToCart = () => {
+    const productWithQuantity = { ...product, quantity }; // Agregar la cantidad seleccionada al producto
+    addToCart(productWithQuantity); // Agregar al carrito
+  };
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -34,20 +41,15 @@ const ItemDetailContainer = () => {
       />
       <p><strong>Precio:</strong> ${product.price}</p>
       <p>{product.description}</p>
-      <button
-        onClick={() => addToCart(product)} // Al hacer clic, agrega el producto al carrito
-        style={{
-          marginTop: "10px",
-          padding: "8px 16px",
-          backgroundColor: "#28a745",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
-        Agregar al carrito
-      </button>
+
+      {/* Componente ItemCount */}
+      <ItemCount
+        stock={product.stock} // Pasamos el stock disponible
+        initial={1} // Cantidad inicial
+        onAdd={(quantity) => addToCart(product, quantity)} // Pasa la cantidad seleccionada al carrito
+      />
+
+
     </div>
   );
 };
