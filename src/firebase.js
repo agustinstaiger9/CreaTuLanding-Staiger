@@ -1,7 +1,8 @@
-// Importa las funciones necesarias de Firebase
+// Importa lo necesario de Firebase
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore"; // 👈 Agregamos Firestore
 
-// Tu configuración de Firebase
+// Tu configuración
 const firebaseConfig = {
   apiKey: "AIzaSyCGmFpa6_08fosZsuvFk-Hz6ETjxkkaPEo",
   authDomain: "agustinstaiger-react.firebaseapp.com",
@@ -11,8 +12,8 @@ const firebaseConfig = {
   appId: "1:593416952852:web:9b3efc61d22cbb2a1f5b01"
 };
 
-// Inicializa Firebase con la configuración
+// Inicializa la app
 const app = initializeApp(firebaseConfig);
 
-// Exporta la aplicación de Firebase
-export { app };
+// Exportamos Firestore ya listo
+export const db = getFirestore(app);
