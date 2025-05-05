@@ -1,8 +1,6 @@
-// Importa lo necesario de Firebase
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore"; // 👈 Agregamos Firestore
+import { getFirestore } from "firebase/firestore";
 
-// Tu configuración usando las variables de entorno
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
