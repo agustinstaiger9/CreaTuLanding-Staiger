@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const ItemCount = ({ stock, quantity, setQuantity, onAdd }) => {
   const increment = () => {
     if (quantity < stock) setQuantity(quantity + 1);
