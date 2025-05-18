@@ -10,3 +10,24 @@
     width: 100%;
   }
 }
+
+@media (min-width: 769px) {
+  .cart-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .cart-buttons button,
+  .cart-buttons a {
+    width: 200px;
+    text-align: center;
+  }
+
+  .cart-buttons button {
+    margin-top: 8px;
+    height: 36px;
+  }
+}
