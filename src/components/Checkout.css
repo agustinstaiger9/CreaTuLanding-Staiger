@@ -60,3 +60,27 @@
 .checkout-button:hover {
   background-color: #0056b3;
 }
+
+
+
+@media (max-width: 768px) {
+  .checkout-container {
+    margin-top: 0.5rem;
+    padding: 0 1rem;
+  }
+
+  .checkout-container h2 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .checkout-container form input,
+  .checkout-container form select,
+  .checkout-container form button {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+}
+
+

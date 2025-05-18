@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import "../styles.css"; // Asegúrate de que esté conectado
 
 const Cart = () => {
   const { cartItems, removeFromCart, clearCart, getTotalPrice } = useContext(CartContext);
@@ -27,6 +28,7 @@ const Cart = () => {
               marginBottom: "1rem",
               borderBottom: "1px solid #ccc",
               paddingBottom: "1rem",
+              flexWrap: "wrap",
             }}
           >
             <div>
@@ -56,7 +58,7 @@ const Cart = () => {
 
       <h3>Total: ${getTotalPrice()}</h3>
 
-      <div style={{ marginTop: "2rem" }}>
+      <div className="cart-buttons" style={{ marginTop: "2rem" }}>
         <button
           onClick={clearCart}
           style={{
@@ -65,7 +67,6 @@ const Cart = () => {
             padding: "0.5rem 1rem",
             borderRadius: "4px",
             cursor: "pointer",
-            marginRight: "1rem",
           }}
         >
           Vaciar carrito
@@ -78,6 +79,8 @@ const Cart = () => {
             padding: "0.5rem 1rem",
             borderRadius: "4px",
             textDecoration: "none",
+            textAlign: "center",
+            marginTop: "0.5rem",
           }}
         >
           Finalizar compra

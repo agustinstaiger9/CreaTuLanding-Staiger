@@ -1,0 +1,12 @@
+@media (max-width: 768px) {
+  .cart-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .cart-buttons button {
+    width: 100%;
+  }
+}
