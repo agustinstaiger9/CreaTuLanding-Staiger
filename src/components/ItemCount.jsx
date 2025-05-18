@@ -1,39 +1,38 @@
-import { useState } from "react";
+import React from "react";
 
-const ItemCount = ({ stock, initial, onAdd, quantity, setQuantity }) => {
+
+const ItemCount = ({ stock, quantity, setQuantity, onAdd }) => {
   const increment = () => {
-    if (quantity < stock) {
-      setQuantity(quantity + 1); // Aumenta la cantidad
-    }
+    if (quantity < stock) setQuantity(quantity + 1);
   };
 
   const decrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1); // Disminuye la cantidad
-    }
+    if (quantity > 1) setQuantity(quantity - 1);
   };
 
   return (
-    <div>
-      <div style={{ marginBottom: "10px" }}>
-        <button onClick={decrement} style={{ marginRight: "10px" }}>
+    <div className="item-count">
+      <div className="counter-controls">
+        <button
+          onClick={decrement}
+          aria-label="Disminuir cantidad"
+          disabled={quantity <= 1}
+        >
           -
         </button>
         <span>{quantity}</span>
-        <button onClick={increment} style={{ marginLeft: "10px" }}>
+        <button
+          onClick={increment}
+          aria-label="Aumentar cantidad"
+          disabled={quantity >= stock}
+        >
           +
         </button>
       </div>
       <button
-        onClick={() => onAdd(quantity)} // Pasa la cantidad seleccionada al carrito
-        style={{
-          padding: "8px 16px",
-          backgroundColor: "#28a745",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
+        onClick={() => onAdd(quantity)}
+        className="add-to-cart-btn"
+        disabled={stock === 0}
       >
         Agregar al carrito
       </button>

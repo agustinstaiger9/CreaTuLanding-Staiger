@@ -1,88 +1,88 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import "./Checkout.css";
 
 const Checkout = () => {
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    address: "",
-  });
-  const { cart, clearCart, getTotalPrice } = useCart();
+  const { cartItems, getTotalPrice, clearCart } = useCart();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("efectivo");
   const navigate = useNavigate();
 
-  // Función para manejar los cambios en el formulario
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserData({
-      ...userData,
-      [name]: value,
-    });
-  };
-
-  // Función para manejar el envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userData.name || !userData.email || !userData.address) {
-      alert("Por favor completa todos los campos.");
+
+    if (cartItems.length === 0) {
+      alert("El carrito está vacío");
       return;
     }
 
+    const order = {
+      buyer: { name, email, paymentMethod },
+      items: cartItems.map(({ id, title, price, quantity }) => ({
+        id,
+        title,
+        price,
+        quantity,
+      })),
+      total: getTotalPrice(),
+      date: new Date(),
+    };
 
-    // Limpiar el carrito después de la compra
-    clearCart();
-    alert("Gracias por tu compra!");
-    navigate("/"); // Redirigir al inicio (puedes cambiarlo según sea necesario)
+    try {
+      const orderRef = await addDoc(collection(db, "orders"), order);
+
+      window.localStorage.setItem("orderId", orderRef.id);
+      window.localStorage.setItem("orderTotal", order.total.toString());
+
+      clearCart();
+
+      navigate("/confirmation");
+    } catch (error) {
+      console.error("Error al crear la orden:", error);
+      alert("Error al finalizar la compra");
+    }
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h2>Formulario de Checkout</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Nombre:
-            <input
-              type="text"
-              name="name"
-              value={userData.name}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Correo electrónico:
-            <input
-              type="email"
-              name="email"
-              value={userData.email}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Dirección:
-            <input
-              type="text"
-              name="address"
-              value={userData.address}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <h3>Total: ${getTotalPrice()}</h3>
-        </div>
-        <div>
-          <button type="submit" style={{ padding: "10px 20px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "5px" }}>
-            Confirmar compra
-          </button>
-        </div>
+    <div className="checkout-container">
+      <form onSubmit={handleSubmit} className="checkout-form">
+        <h2 className="checkout-title">Último paso para finalizar tu pedido</h2>
+
+        <input
+          type="text"
+          placeholder="Nombre"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className="checkout-input"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="checkout-input"
+        />
+
+        <select
+          value={paymentMethod}
+          onChange={(e) => setPaymentMethod(e.target.value)}
+          required
+          className="checkout-select"
+        >
+          <option value="efectivo">Efectivo</option>
+          <option value="transferencia">Transferencia</option>
+          <option value="tarjeta">Tarjeta</option>
+        </select>
+
+        <button type="submit" className="checkout-button">
+          Finalizar compra
+        </button>
       </form>
     </div>
   );

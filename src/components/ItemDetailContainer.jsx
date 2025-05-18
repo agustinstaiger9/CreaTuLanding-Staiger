@@ -45,7 +45,7 @@ const ItemDetailContainer = () => {
     <div style={{ textAlign: "center" }}>
       <h2>{product.title}</h2>
       <img
-        src={product.image || "https://via.placeholder.com/200x200?text=Imagen"} // Imagen por defecto
+        src={product.image || "https://via.placeholder.com/200x200?text=Imagen"}
         alt={product.title}
         style={{
           width: "100%",
@@ -55,7 +55,7 @@ const ItemDetailContainer = () => {
         }}
       />
       <p><strong>Precio:</strong> ${product.price}</p>
-      <p>{product.description}</p> {/* Aquí se muestra la descripción */}
+      <p>{product.description}</p> {}
 
       {!addedToCart ? (
         <ItemCount

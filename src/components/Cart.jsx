@@ -1,30 +1,52 @@
-import { useCart } from "../context/CartContext";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const { cart, removeItem, clearCart } = useCart();
+  const { cartItems, removeFromCart, clearCart, getTotalPrice } = useContext(CartContext);
 
-  if (cart.length === 0) {
-    return <p style={{ textAlign: "center" }}>El carrito está vacío.</p>;
+  if (cartItems.length === 0) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "2rem" }}>
+        <h2>Tu carrito está vacío</h2>
+        <Link to="/">Volver al inicio</Link>
+      </div>
+    );
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
+    <div style={{ padding: "2rem" }}>
       <h2>Tu carrito</h2>
       <ul style={{ listStyle: "none", padding: 0 }}>
-        {cart.map((product) => (
-          <li key={product.id} style={{ marginBottom: "20px" }}>
-            <img
-              src={product.image || "https://via.placeholder.com/50x50?text=Img"}
-              alt={product.title}
-              style={{ width: "50px", height: "50px", objectFit: "cover" }}
-            />
-            <p>{product.title}</p>
-            <p>Precio: ${product.price}</p>
-            <p>Cantidad: {product.quantity}</p>
+        {cartItems.map((item) => (
+          <li
+            key={item.id}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "1rem",
+              borderBottom: "1px solid #ccc",
+              paddingBottom: "1rem",
+            }}
+          >
+            <div>
+              <h3>{item.title}</h3>
+              <p>Cantidad: {item.quantity}</p>
+              <p>Precio unitario: ${item.price}</p>
+              <p>Subtotal: ${item.price * item.quantity}</p>
+            </div>
             <button
-              onClick={() => removeItem(product.id)}
-              style={{ marginBottom: "10px" }}
+              onClick={() => removeFromCart(item.id)}
+              style={{
+                height: "2rem",
+                alignSelf: "center",
+                backgroundColor: "#dc3545",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                padding: "0 1rem",
+              }}
             >
               Eliminar
             </button>
@@ -32,33 +54,33 @@ const Cart = () => {
         ))}
       </ul>
 
-      <div style={{ marginTop: "20px" }}>
+      <h3>Total: ${getTotalPrice()}</h3>
+
+      <div style={{ marginTop: "2rem" }}>
         <button
           onClick={clearCart}
           style={{
-            marginRight: "10px",
-            padding: "10px 20px",
-            backgroundColor: "#dc3545",
-            color: "white",
+            backgroundColor: "#ffc107",
             border: "none",
+            padding: "0.5rem 1rem",
             borderRadius: "4px",
+            cursor: "pointer",
+            marginRight: "1rem",
           }}
         >
           Vaciar carrito
         </button>
-
-        <Link to="/checkout">
-          <button
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-            }}
-          >
-            Finalizar compra
-          </button>
+        <Link
+          to="/checkout"
+          style={{
+            backgroundColor: "#28a745",
+            color: "white",
+            padding: "0.5rem 1rem",
+            borderRadius: "4px",
+            textDecoration: "none",
+          }}
+        >
+          Finalizar compra
         </Link>
       </div>
     </div>

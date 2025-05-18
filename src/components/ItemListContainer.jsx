@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 const ItemListContainer = () => {
@@ -9,19 +9,34 @@ const ItemListContainer = () => {
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
   const { addToCart } = useCart();
+  const { categoryId } = useParams();
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
         const productsRef = collection(db, "productos");
-        const querySnapshot = await getDocs(productsRef);
+        let q;
+
+        const normalizedCategoryId = categoryId?.toLowerCase().trim();
+
+        console.log("Filtrando por categoría:", normalizedCategoryId);
+
+        if (normalizedCategoryId) {
+          
+          q = query(productsRef, where("category", "==", normalizedCategoryId));
+        } else {
+          q = productsRef;
+        }
+
+        const querySnapshot = await getDocs(q);
         const items = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
         setProducts(items);
 
-        // Inicializamos cantidades en 1
+        
         const initialQuantities = {};
         items.forEach((item) => {
           initialQuantities[item.id] = 1;
@@ -35,8 +50,7 @@ const ItemListContainer = () => {
     };
 
     fetchProducts();
-  }, []);
-
+  }, [categoryId]);
   const increment = (id) => {
     setQuantities((prev) => ({
       ...prev,
@@ -81,7 +95,10 @@ const ItemListContainer = () => {
             }}
           >
             <img
-              src={product.image || "https://via.placeholder.com/200x200?text=Imagen"}
+              src={
+                product.image ||
+                "https://via.placeholder.com/200x200?text=Imagen"
+              }
               alt={product.title}
               style={{
                 width: "100%",
@@ -91,9 +108,11 @@ const ItemListContainer = () => {
               }}
             />
             <h3>{product.title}</h3>
-            <p><strong>Precio:</strong> ${product.price}</p>
+            <p>
+              <strong>Precio:</strong> ${product.price}
+            </p>
 
-            {/* Controles de cantidad */}
+            {}
             <div style={{ margin: "10px 0" }}>
               <button onClick={() => decrement(product.id)}>-</button>
               <span style={{ margin: "0 10px" }}>{quantities[product.id]}</span>

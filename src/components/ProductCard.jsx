@@ -1,26 +1,30 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
 
-  // Esta función se llama cuando el usuario hace clic en "Agregar al carrito"
   const handleAddToCart = () => {
-    addToCart(product, 1); // 1 es la cantidad predeterminada, por defecto agregamos 1 producto
+    addToCart(product, 1);
   };
 
   return (
     <div className="card">
-      <img src={product.thumbnail} alt={product.title} className="card-img-top" />
+      <img
+        src={product.thumbnail}
+        alt={product.title}
+        className="card-img-top"
+      />
       <div className="card-body">
         <h5>{product.title}</h5>
         <p>{product.description}</p>
         <button className="btn btn-success" onClick={handleAddToCart}>
           Agregar al carrito
         </button>
-        <a href={`/item/${product.id}`} className="btn btn-primary">
+        <Link to={`/item/${product.id}`} className="btn btn-primary" style={{ marginLeft: "10px" }}>
           Ver detalles
-        </a>
+        </Link>
       </div>
     </div>
   );
